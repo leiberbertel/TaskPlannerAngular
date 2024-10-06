@@ -1,0 +1,81 @@
+<section class="todoapp">
+  <header class="header">
+    <div class="container">
+      <h1>My Day</h1>
+      <p>All my tasks in one place</p>
+      <input
+        class="new-todo"
+        placeholder="Type new todo"
+        autofocus
+        type="text"
+        [formControl]="newTaskCtrl"
+        (keydown.enter)="processInput()"
+      />
+    </div>
+  </header>
+  <div class="container todoapp-wrapper">
+    @if (tasks().length > 0) {
+      <section class="main">
+        <ul class="todo-list">
+          @for (task of tasksByFilter(); track task.id) {
+          <li
+            (dblclick)="updateTaskEditingMode(task.id)"
+            [class.completed]="task.completed"
+            [class.editing]="task.editing"
+          >
+            <div class="view">
+              <input
+                class="toggle"
+                type="checkbox"
+                [checked]="task.completed"
+                (change)="toggleChecked(task.id)"
+              />
+              <label for="task-title">{{ task.title }}</label>
+              <button class="destroy" (click)="deleteTask(task.id)"></button>
+            </div>
+            <input
+              class="edit"
+              [value]="task.title"
+              (keydown.enter)="updateTaskTitle(task.id, $event)"
+            />
+          </li>
+          }
+        </ul>
+      </section>
+    }
+    @if (tasks().length > 0) {
+    <footer class="footer">
+      <span class="todo-count">
+        <strong>{{ tasksByFilter().length }}</strong>
+        {{ tasksByFilter().length !== 1 ? "items" : "item" }} left
+      </span>
+      <ul class="filters">
+        <li>
+          <a
+            (click)="changeFilter(filtersStatus.ALL)"
+            [class.selected]="currentFilter() === filtersStatus.ALL"
+            >All</a
+          >
+        </li>
+        <li>
+          <a
+            (click)="changeFilter(filtersStatus.PENDING)"
+            [class.selected]="currentFilter() === filtersStatus.PENDING"
+            >Pending</a
+          >
+        </li>
+        <li>
+          <a
+            (click)="changeFilter(filtersStatus.COMPLETED)"
+            [class.selected]="currentFilter() === filtersStatus.COMPLETED"
+            >Completed</a
+          >
+        </li>
+      </ul>
+      @if (toDoCounter() > 0) {
+        <button class="clear-completed" (click)="deleteTaskCompleted()">Clear completed</button>
+      }
+    </footer>
+    }
+  </div>
+</section>
