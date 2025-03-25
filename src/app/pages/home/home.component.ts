@@ -162,7 +162,6 @@ export class HomeComponent {
    * @returns {void}
    */
   updateTaskEditingMode(taskId: number): void {
-    debugger;
     this.tasks.update((tasks): Task[] =>
       tasks.map((task): Task => {
         if (task.id === taskId && !task.completed) {
